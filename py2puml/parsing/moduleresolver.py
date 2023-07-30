@@ -2,7 +2,7 @@ from inspect import isclass
 from functools import reduce
 from typing import Type, Iterable, List, NamedTuple
 from types import ModuleType
-
+import typing
 
 class NamespacedType(NamedTuple):
     '''
@@ -27,7 +27,12 @@ def search_in_module_or_builtins(searched_module: ModuleType, namespace: str):
 
     # searches the namespace in the builtins otherwise
     if hasattr(searched_module, '__builtins__'):
-        return searched_module.__builtins__.get(namespace, None)
+        found_module_or_leaf_type = searched_module.__builtins__.get(namespace, None)
+
+    if found_module_or_leaf_type is None:
+        return getattr(typing, namespace, None)
+    else:
+        return found_module_or_leaf_type
 
 
 def search_in_module(namespaces: List[str], module: ModuleType):

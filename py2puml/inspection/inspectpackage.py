@@ -14,12 +14,16 @@ def inspect_package(
     domain_items_by_fqn: Dict[str, UmlItem],
     domain_relations: List[UmlRelation]
 ):
-    for _, name, is_pkg in walk_packages([domain_path], f'{domain_module}.'):
+    for _, name, is_pkg in walk_packages([domain_path], f'{domain_module}.', onerror=lambda x: None):
+
         if not is_pkg:
-            domain_item_module: ModuleType = import_module(name)
-            inspect_module(
-                domain_item_module,
-                domain_module,
-                domain_items_by_fqn,
-                domain_relations
-            )
+            try:
+                domain_item_module: ModuleType = import_module(name)
+                inspect_module(
+                    domain_item_module,
+                    domain_module,
+                    domain_items_by_fqn,
+                    domain_relations
+                )
+            except Exception:
+                continue

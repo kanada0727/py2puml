@@ -5,7 +5,7 @@ from typing import Tuple
 
 FORWARD_REFERENCES: Pattern = re_compile(r"ForwardRef\('([^']+)'\)")
 IS_COMPOUND_TYPE: Pattern = re_compile(r'^[a-z|A-Z|0-9|\[|\]|\.|,|\s|_]+$')
-SPLITTING_CHARACTERS = ('[', ']', ',')
+SPLITTING_CHARACTERS = ('[', ']', ',', "|")
 
 
 def remove_forward_references(compound_type_annotation: str, module_name: str) -> str:
